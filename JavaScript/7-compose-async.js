@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const fs = require('node:fs');
+const fs = require("node:fs");
 
 const reduceAsync = (items, performer, done, initialValue) => {
   const nseted = initialValue === undefined;
@@ -12,7 +12,7 @@ const reduceAsync = (items, performer, done, initialValue) => {
     if (!err && counter !== items.length - 1) {
       counter++;
       previous = data;
-      current  = items[counter];
+      current = items[counter];
       performer(previous, current, response, counter, items);
     } else if (done) {
       done(err, data);
@@ -29,18 +29,19 @@ const last = (arr) => arr[arr.length - 1];
 // args[i] - function
 // args[-1] - done(err, data)
 //
-const composeAsync = (funcs, ...args) => (
-  () => reduceAsync(
-    args.slice(0, -1),
-    (params, fn, done) => fn(...[].concat(params).concat(done)),
-    last(args),
-    funcs
-  )
-);
+const composeAsync =
+  (funcs, ...args) =>
+  () =>
+    reduceAsync(
+      args.slice(0, -1),
+      (params, fn, done) => fn(...[].concat(params).concat(done)),
+      last(args),
+      funcs
+    );
 
 // Usage
 
-const randomize = (max) => Math.floor((Math.random() * max));
+const randomize = (max) => Math.floor(Math.random() * max);
 
 const wrapAsync = (callback) => setTimeout(callback, randomize(1000));
 
@@ -52,19 +53,19 @@ const read = (file, charset, callback) => {
 const parse = (data, callback) => {
   console.dir({ parse: { data, callback } });
   wrapAsync(() => {
-    callback(null, ['Data has been', 'processed!']);
+    callback(null, ["Data has been", "processed!"]);
   });
 };
 
 const preprocess = (data1, data2, callback) => {
   console.dir({ preprocess: { data1, data2, callback } });
   wrapAsync(() => {
-    callback(null, data1 + ' ' + data2);
+    callback(null, data1 + " " + data2);
   });
 };
 
 const cf1 = composeAsync(
-  ['config.txt', 'utf8'],
+  ["config.txt", "utf8"],
   read,
   parse,
   preprocess,
